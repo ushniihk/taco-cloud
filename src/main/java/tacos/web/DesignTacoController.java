@@ -26,11 +26,6 @@ public class DesignTacoController {
 
     private final IngredientRepository ingredientRepo;
 
-/*    @Autowired
-    public DesignTacoController(IngredientRepository ingredientRepo) {
-        this.ingredientRepo = ingredientRepo;
-    }*/
-
     @ModelAttribute
     public void addIngredientsToModel(Model model) {
         Iterable<Ingredient> ingredients = ingredientRepo.findAll();
