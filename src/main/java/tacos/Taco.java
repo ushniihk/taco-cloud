@@ -1,30 +1,33 @@
 package tacos;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import lombok.Data;
+import org.springframework.data.rest.core.annotation.RestResource;
+
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
-import lombok.Data;
+import java.util.Date;
+import java.util.List;
 
 @Data
 @Entity
+@RestResource(rel = "tacos", path = "tacos")
 public class Taco {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotNull
     @Size(min = 5, message = "Name must be at least 5 characters long")
     private String name;
     @NotNull
     @Size(min = 1, message = "You must choose at least 1 ingredient")
-    @ManyToMany()
-    private List<Ingredient> ingredients = new ArrayList<>();
-    private Date createdAt = new Date();
+    @ManyToMany(targetEntity = Ingredient.class)
+    private List<Ingredient> ingredients;
+    @Column(name = "created_at")
+    private Date createdAt;
+
+    @PrePersist
+    void createdAt() {
+        this.createdAt = new Date();
+    }
 }
